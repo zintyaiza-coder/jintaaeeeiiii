@@ -1,116 +1,103 @@
 const taman = document.getElementById('taman');
-const lirikBox = document.getElementById('lirik-box');
+const lirikVideoBox = document.getElementById('lirik-video-box');
+const teksLirikUtama = document.getElementById('teks-lirik-utama');
 const lagu = document.getElementById('lagu');
 const layarTantangan = document.getElementById('layar-tantangan');
 const pesanSalah = document.getElementById('pesan-salah');
-
+const btnUlang = document.getElementById('btn-ulang');
 const tombolPilihan = document.querySelectorAll('.btn-pilihan');
 
-// Palet warna bunga estetik
-const warnaBunga = [
-    { luar: '#ff7eb3', dalam: '#ff758c', putik: '#fef08a' }, // Pink Sakura
-    { luar: '#c084fc', dalam: '#9333ea', putik: '#fde047' }, // Ungu Lavender
-    { luar: '#60a5fa', dalam: '#2563eb', putik: '#fef9c3' }, // Biru Kristal
-    { luar: '#fb7185', dalam: '#e11d48', putik: '#fde047' }  // Merah Mawar
-];
+// Palet warna bunga ala video (Cyan & Teal bercahaya)
+const paletVideo = { luar: '#64ffda', dalam: '#2dd4bf', putik: '#fef08a' };
 
-// Bikin kunang-kunang latar
-function buatKunangKunang() {
+// 1. Buat bintang latar belakang
+function buatBintang() {
     const container = document.getElementById('kunang-container');
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 50; i++) {
         const k = document.createElement('div');
         k.classList.add('kunang');
         k.style.left = Math.random() * 100 + 'vw';
         k.style.top = Math.random() * 100 + 'vh';
-        k.style.animationDuration = (4 + Math.random() * 5) + 's';
+        k.style.animationDuration = (2 + Math.random() * 3) + 's';
+        k.style.animationDelay = (Math.random() * 2) + 's';
         container.appendChild(k);
     }
 }
-buatKunangKunang();
+buatBintang();
 
-// Logika Pilihan Tombol Tantangan
+// 2. Tombol Pilihan Tantangan
 tombolPilihan.forEach(btn => {
     btn.addEventListener('click', () => {
         const jawaban = btn.getAttribute('data-jawaban');
-
         if (jawaban === 'benar') {
-            // JAWABAN BENAR: Buka Taman!
-            bukaTamanMagis();
+            mulaiKlimaksVideo();
         } else {
-            // JAWABAN SALAH: Tampilkan pesan peringatan
             pesanSalah.classList.remove('tersembunyi');
-            btn.style.transform = 'scale(0.9)';
-            setTimeout(() => btn.style.transform = 'scale(1)', 200);
         }
     });
 });
 
-// Fungsi Utama: Membuka Taman & Momen Klimaks
-function bukaTamanMagis() {
-    // 1. Sembunyikan layar tantangan
+// 3. Fungsi Utama Klimaks (Sinkronisasi Lirik & Munculnya Bunga dari Bawah)
+function mulaiKlimaksVideo() {
     layarTantangan.classList.add('tersembunyi');
+    btnUlang.classList.remove('tersembunyi');
+    lirikVideoBox.classList.remove('tersembunyi');
 
-    // 2. Putar lagu Bruno Mars secara mulus
+    // Putar lagu
     lagu.currentTime = 0;
-    lagu.volume = 0.8;
+    lagu.volume = 0.9;
     lagu.play().catch(() => console.log("Audio siap diputar"));
 
-    // 3. Munculkan lirik lagu utama di atas
-    lirikBox.innerText = "♪ That I should have bought you flowers, and held your hand...";
+    // Rangkaian lirik yang muncul berurutan sesuai alur video
+    const timelineLirik = [
+        { teks: "i hope", waktu: 0 },
+        { teks: "he buys you", waktu: 1500 },
+        { teks: "flowers", waktu: 3000 },
+        { teks: "i hope he holds", waktu: 5000 },
+        { teks: "your hand...", waktu: 6800 },
+        { teks: "♪ That I should have bought you flowers, and held your hand...", waktu: 9000 }
+    ];
 
-    // 4. Munculkan 12 Bunga SVG Sekaligus Secara Beruntun (Cascade Effect)
-    for (let i = 0; i < 12; i++) {
-        // Atur posisi acak di area layar (menghindari bagian paling pinggir)
-        const x = Math.random() * (window.innerWidth - 150) + 75;
-        const y = Math.random() * (window.innerHeight - 250) + 150;
-        
-        // Jeda animasi bertahap (0.1s, 0.2s, dst.) biar mekarnya terlihat bergelombang estetik
-        const jedaAnimasi = i * 0.15; 
+    timelineLirik.forEach(item => {
+        setTimeout(() => {
+            teksLirikUtama.innerText = item.teks;
+        }, item.waktu);
+    });
 
-        tumbuhkanBungaSVG(x, y, jedaAnimasi);
-    }
-
-    // 5. Munculkan Sekawanan Kupu-kupu Berterbangan
-    for (let j = 0; j < 6; j++) {
-        const kx = Math.random() * window.innerWidth;
-        const ky = Math.random() * window.innerHeight;
-        setTimeout(() => munculkanKupu(kx, ky), j * 300);
-    }
+    // Munculkan bunga dari bawah secara berurutan persis di detik-detik penting lagu
+    setTimeout(() => tumbuhkanBungaDariBawah(window.innerWidth * 0.35, 0.2), 3000);
+    setTimeout(() => tumbuhkanBungaDariBawah(window.innerWidth * 0.5, 0.1), 3200);
+    setTimeout(() => tumbuhkanBungaDariBawah(window.innerWidth * 0.65, 0.3), 3400);
 }
 
-// Fungsi Menggambar Bunga SVG dengan Kelopak Berlapis
-function tumbuhkanBungaSVG(x, y, jeda) {
-    const palet = warnaBunga[Math.floor(Math.random() * warnaBunga.length)];
+// 4. Fungsi Menggambar Bunga SVG Cyan/Teal dari Bawah
+function tumbuhkanBungaDariBawah(x, jeda) {
     const wadah = document.createElement('div');
     wadah.classList.add('wadah-bunga');
     wadah.style.left = x + 'px';
-    wadah.style.top = y + 'px';
 
     wadah.innerHTML = `
         <svg class="kepala-bunga" viewBox="0 0 100 100" style="--jeda: ${jeda}s;">
             <g transform="translate(50,50)">
-                <!-- Kelopak Lapis Luar -->
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(0)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(45)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(90)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(135)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(180)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(225)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(270)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(315)" />
+                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${paletVideo.luar}" transform="rotate(0)" />
+                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${paletVideo.luar}" transform="rotate(45)" />
+                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${paletVideo.luar}" transform="rotate(90)" />
+                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${paletVideo.luar}" transform="rotate(135)" />
+                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${paletVideo.luar}" transform="rotate(180)" />
+                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${paletVideo.luar}" transform="rotate(225)" />
+                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${paletVideo.luar}" transform="rotate(270)" />
+                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${paletVideo.luar}" transform="rotate(315)" />
                 
-                <!-- Kelopak Lapis Dalam -->
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(22.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(67.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(112.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(157.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(202.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(247.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(292.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(337.5)" />
+                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${paletVideo.dalam}" transform="rotate(22.5)" />
+                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${paletVideo.dalam}" transform="rotate(67.5)" />
+                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${paletVideo.dalam}" transform="rotate(112.5)" />
+                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${paletVideo.dalam}" transform="rotate(157.5)" />
+                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${paletVideo.dalam}" transform="rotate(202.5)" />
+                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${paletVideo.dalam}" transform="rotate(247.5)" />
+                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${paletVideo.dalam}" transform="rotate(292.5)" />
+                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${paletVideo.dalam}" transform="rotate(337.5)" />
 
-                <!-- Putik Tengah -->
-                <circle cx="0" cy="0" r="9" fill="${palet.putik}" />
+                <circle cx="0" cy="0" r="9" fill="${paletVideo.putik}" />
             </g>
         </svg>
         <div class="tangkai" style="--jeda: ${jeda}s;"></div>
@@ -119,12 +106,12 @@ function tumbuhkanBungaSVG(x, y, jeda) {
     taman.appendChild(wadah);
 }
 
-// Fungsi Memunculkan Kupu-kupu
-function munculkanKupu(x, y) {
-    const kupu = document.createElement('div');
-    kupu.classList.add('kupu');
-    kupu.innerText = '🦋';
-    kupu.style.left = x + 'px';
-    kupu.style.top = y + 'px';
-    taman.appendChild(kupu);
-}
+// 5. Tombol Ulangi
+btnUlang.addEventListener('click', () => {
+    taman.innerHTML = '';
+    lagu.pause();
+    lirikVideoBox.classList.add('tersembunyi');
+    btnUlang.classList.add('tersembunyi');
+    pesanSalah.classList.add('tersembunyi');
+    layarTantangan.classList.remove('tersembunyi');
+});
