@@ -116,20 +116,15 @@ function ubahLirik(teksBaru) {
     }, 350);
 }
 
-// --- JADWAL LIRIK LENGKAP "WHEN I WAS YOUR MAN" ---
+// --- JADWAL LIRIK YANG SUDAH DISINKRONKAN DENGAN AUDIO KAMU ---
 const jadwalLirik = [
-    { detik: 0.5, teks: "Same bed, but it feels just a little bit bigger now", aksiBunga: false },
-    { detik: 5.0, teks: "Our song on the radio, but it don't sound the same", aksiBunga: true },
-    { detik: 10.0, teks: "When our friends talk about you, all it does is just tear me down", aksiBunga: false },
-    { detik: 15.5, teks: "'Cause my heart breaks a little when I hear your name", aksiBunga: true },
-    { detik: 21.0, teks: "It all just sounds like ooh, ooh, ooh", aksiBunga: false },
-    { detik: 26.0, teks: "Mm, too young, too dumb to realize", aksiBunga: true },
-    { detik: 31.0, teks: "That I should have bought you flowers 🌸", aksiBunga: true },
-    { detik: 36.5, teks: "And held your hand 🤍", aksiBunga: true },
-    { detik: 41.5, teks: "Should have gave you all my hours", aksiBunga: false },
-    { detik: 46.0, teks: "When I had the chance", aksiBunga: true },
-    { detik: 51.0, teks: "Take you to every party 'cause all you wanted to do was dance", aksiBunga: true },
-    { detik: 59.0, teks: "♪ Now my baby's dancing, but she's dancing with another man ♪", aksiBunga: true }
+    { detik: 0.0, teks: "Mm, too young, too dumb to realize", aksiBunga: true },
+    { detik: 3.5, teks: "That I should have bought you flowers 🌸[cite: 1]", aksiBunga: true },
+    { detik: 8.5, teks: "And held your hand 🤍[cite: 1]", aksiBunga: true },
+    { detik: 13.0, teks: "Should have gave you all my hours[cite: 1]", aksiBunga: false },
+    { detik: 17.5, teks: "When I had the chance[cite: 1]", aksiBunga: true },
+    { detik: 22.0, teks: "Take you to every party 'cause all you wanted to do was dance[cite: 1]", aksiBunga: true },
+    { detik: 29.5, teks: "♪ Now my baby's dancing, but she's dancing with another man ♪[cite: 1]", aksiBunga: true }
 ];
 
 // Sinkronisasi Real-Time dengan Audio
@@ -164,7 +159,7 @@ function mulaiPertunjukan() {
     btnUlang.classList.remove('tersembunyi');
     buatRumput();
 
-    // ATUR DETIK MULAI LAGU DI SINI (Ubah angka 0 jika ingin mulai dari detik lain)
+    // Memutar lagu dari detik ke-0 (karena audionya pas dimulai dari reff)[cite: 1]
     lagu.currentTime = 0; 
     lagu.volume = 0.9;
     lagu.play().catch(() => console.log("Menunggu interaksi audio"));
