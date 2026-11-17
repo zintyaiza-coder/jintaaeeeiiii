@@ -4,24 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magical Flower Garden ✨🌸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Efek Kunang-kunang Latar -->
+    <!-- Efek Bintang/Kunang-kunang Latar -->
     <div id="kunang-container"></div>
 
-    <!-- Lirik Melayang / Pesan Utama -->
-    <div id="lirik-box"></div>
+    <!-- Kotak Lirik Berjalan Ala Video -->
+    <div id="lirik-video-box" class="tersembunyi">
+        <h2 id="teks-lirik-utama"></h2>
+    </div>
 
-    <!-- Kanvas Utama Tempat Bunga & Kupu-kupu Muncul Nanti -->
+    <!-- Kanvas Utama Tempat Bunga & Kupu-kupu Muncul -->
     <main id="taman"></main>
 
     <!-- KOTAK TANTANGAN / TEKA-TEKI AWAL -->
     <div id="layar-tantangan" class="overlay">
         <div class="kartu">
-            <h1>✨ Kunci Taman Magis ✨</h1>
-            <p>Selesaikan teka-teki lirik ini untuk membuka taman dan membangunkan bunga-bunga:</p>
+            <div class="ikon-mahkota">🌸✨</div>
+            <h1>Kunci Taman Magis</h1>
+            <p>Selesaikan teka-teki lirik ini untuk membuka taman:</p>
             <p class="soal-lirik">"That I should have bought you ______"</p>
             
             <div class="pilihan-btn">
@@ -33,14 +37,8 @@
         </div>
     </div>
 
-    <!-- LAYAR ENDING / KETERANGAN SETELAH TAMAN TERBUKA -->
-    <div id="layar-ending" class="overlay tersembunyi">
-        <div class="kartu ending-card">
-            <h1>Taman Impian Terwujud! 🌸🦋</h1>
-            <p>"That I should have bought you flowers, and held your hand..."</p>
-            <button id="btn-ulang">Main Lagi 🔄</button>
-        </div>
-    </div>
+    <!-- Tombol Ulangi di Pojok Kanan Atas -->
+    <button id="btn-ulang" class="btn-ulang tersembunyi">Ulangi 🔄</button>
 
     <!-- Audio Lagu -->
     <audio id="lagu" src="lagu.mp3" loop></audio>
