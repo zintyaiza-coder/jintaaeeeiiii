@@ -116,15 +116,15 @@ function ubahLirik(teksBaru) {
     }, 350);
 }
 
-// --- JADWAL LIRIK YANG SUDAH DISINKRONKAN DENGAN AUDIO KAMU ---
+// --- JADWAL LIRIK YANG DIMAJUKAN SEDIKIT AGAR TIDAK TELAT ---
 const jadwalLirik = [
-    { detik: 0.0, teks: "Mm, too young, too dumb to realize", aksiBunga: true },
-    { detik: 3.5, teks: "That I should have bought you flowers 🌸[cite: 1]", aksiBunga: true },
-    { detik: 8.5, teks: "And held your hand 🤍[cite: 1]", aksiBunga: true },
-    { detik: 13.0, teks: "Should have gave you all my hours[cite: 1]", aksiBunga: false },
-    { detik: 17.5, teks: "When I had the chance[cite: 1]", aksiBunga: true },
-    { detik: 22.0, teks: "Take you to every party 'cause all you wanted to do was dance[cite: 1]", aksiBunga: true },
-    { detik: 29.5, teks: "♪ Now my baby's dancing, but she's dancing with another man ♪[cite: 1]", aksiBunga: true }
+    { detik: 0.0, teks: "Mm, too young, too dumb to realize[cite: 1]", aksiBunga: true },
+    { detik: 2.8, teks: "That I should have bought you flowers 🌸[cite: 1]", aksiBunga: true },
+    { detik: 7.8, teks: "And held your hand 🤍[cite: 1]", aksiBunga: true },
+    { detik: 12.2, teks: "Should have gave you all my hours[cite: 1]", aksiBunga: false },
+    { detik: 16.8, teks: "When I had the chance[cite: 1]", aksiBunga: true },
+    { detik: 21.2, teks: "Take you to every party 'cause all you wanted to do was dance[cite: 1]", aksiBunga: true },
+    { detik: 28.5, teks: "♪ Now my baby's dancing, but she's dancing with another man ♪[cite: 1]", aksiBunga: true }
 ];
 
 // Sinkronisasi Real-Time dengan Audio
@@ -159,12 +159,11 @@ function mulaiPertunjukan() {
     btnUlang.classList.remove('tersembunyi');
     buatRumput();
 
-    // Memutar lagu dari detik ke-0 (karena audionya pas dimulai dari reff)[cite: 1]
     lagu.currentTime = 0; 
     lagu.volume = 0.9;
     lagu.play().catch(() => console.log("Menunggu interaksi audio"));
 
-    // BEGITU TOMBOL FLOWERS DITEKAN: Langsung mekar 10 bunga sekaligus biar rimbun!
+    // Mekar 10 bunga sekaligus saat tombol diklik
     for (let i = 0; i < 10; i++) {
         const posX = (window.innerWidth * 0.1) + Math.random() * (window.innerWidth * 0.8);
         const tinggi = 160 + Math.random() * 120;
@@ -228,7 +227,6 @@ function munculkanKupuCahaya(x, y, warna) {
     tamanBunga.appendChild(kupu);
 }
 
-// Klik di mana saja di layar untuk nanam bunga tambahan & partikel
 document.addEventListener('click', (e) => {
     if (!gameAktif) return;
     if (e.target.closest('#btn-ulang') || e.target.closest('.overlay')) return;
@@ -242,7 +240,6 @@ document.addEventListener('click', (e) => {
     tanamBungaMewah(e.clientX, tinggiBunga, skalaAcak);
 });
 
-// Tombol Main Lagi / Reset
 btnUlang.addEventListener('click', () => {
     gameAktif = false;
     indeksLirikAktif = -1;
