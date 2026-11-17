@@ -3,42 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magical Flower Garden ✨🌸</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <title>Magical Glowing Garden ✨🌸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Playfair+Display:ital,wght@0,500;1,600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Efek Bintang/Kunang-kunang Latar -->
-    <div id="kunang-container"></div>
+    <!-- Kanvas Partikel Cahaya & Kunang-kunang Real-time -->
+    <canvas id="canvas-partikel"></canvas>
 
-    <!-- Kotak Lirik Berjalan Ala Video -->
-    <div id="lirik-video-box" class="tersembunyi">
-        <h2 id="teks-lirik-utama"></h2>
+    <!-- Kabut Cahaya Latar -->
+    <div class="aurora-bg"></div>
+
+    <!-- Lirik Sinematik -->
+    <div id="lirik-container" class="tersembunyi">
+        <p id="teks-lirik"></p>
     </div>
 
-    <!-- Kanvas Utama Tempat Bunga & Kupu-kupu Muncul -->
-    <main id="taman"></main>
+    <!-- Wadah Taman Bunga 3D CSS -->
+    <div id="taman-bunga"></div>
 
-    <!-- KOTAK TANTANGAN / TEKA-TEKI AWAL -->
+    <!-- Rumput Bercahaya di Bagian Bawah -->
+    <div id="rumput-container"></div>
+
+    <!-- LAYAR TEKA-TEKI AWAL -->
     <div id="layar-tantangan" class="overlay">
         <div class="kartu">
-            <div class="ikon-mahkota">🌸✨</div>
-            <h1>Kunci Taman Magis</h1>
-            <p>Selesaikan teka-teki lirik ini untuk membuka taman:</p>
-            <p class="soal-lirik">"That I should have bought you ______"</p>
+            <div class="badge">✨ SECRET GARDEN ✨</div>
+            <h1>Kunci Taman Cahaya</h1>
+            <p class="deskripsi">Lengkapi potongan lirik ini untuk membangunkan bunga-bunga di kegelapan:</p>
+            <div class="kotak-soal">
+                "That I should have bought you <span class="kosong">______</span>"
+            </div>
             
             <div class="pilihan-btn">
                 <button class="btn-pilihan" data-jawaban="salah">Stars ✨</button>
                 <button class="btn-pilihan" data-jawaban="benar">Flowers 🌸</button>
                 <button class="btn-pilihan" data-jawaban="salah">Shadows 🌙</button>
             </div>
-            <p id="pesan-salah" class="pesan-salah tersembunyi">Ups, bukan itu! Coba ingat lirik lagunya lagi... 🎶</p>
+            <p id="pesan-salah" class="pesan-salah tersembunyi">Bukan itu... coba dengarkan lagi melodi di hatimu 🎶</p>
         </div>
     </div>
 
-    <!-- Tombol Ulangi di Pojok Kanan Atas -->
-    <button id="btn-ulang" class="btn-ulang tersembunyi">Ulangi 🔄</button>
+    <!-- Petunjuk & Tombol Reset -->
+    <div id="petunjuk" class="tersembunyi">Sentuh layar untuk memanggil cahaya & bunga baru ✨</div>
+    <button id="btn-ulang" class="btn-ulang tersembunyi">Ulangi ↻</button>
 
     <!-- Audio Lagu -->
     <audio id="lagu" src="lagu.mp3" loop></audio>
