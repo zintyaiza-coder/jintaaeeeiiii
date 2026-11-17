@@ -1,131 +1,225 @@
-const taman = document.getElementById('taman');
-const lirikBox = document.getElementById('lirik-box');
-const lagu = document.getElementById('lagu');
-const layarTantangan = document.getElementById('layar-tantangan');
-const pesanSalah = document.getElementById('pesan-salah');
-
-const tombolPilihan = document.querySelectorAll('.btn-pilihan');
-
-// Palet warna bunga estetik
-const warnaBunga = [
-    { luar: '#ff7eb3', dalam: '#ff758c', putik: '#fef08a' }, // Pink Sakura
-    { luar: '#c084fc', dalam: '#9333ea', putik: '#fde047' }, // Ungu Lavender
-    { luar: '#60a5fa', dalam: '#2563eb', putik: '#fef9c3' }, // Biru Kristal
-    { luar: '#fb7185', dalam: '#e11d48', putik: '#fde047' }  // Merah Mawar
-];
-
-// Bikin kunang-kunang latar
-function buatKunangKunang() {
-    const container = document.getElementById('kunang-container');
-    for (let i = 0; i < 30; i++) {
-        const k = document.createElement('div');
-        k.classList.add('kunang');
-        k.style.left = Math.random() * 100 + 'vw';
-        k.style.top = Math.random() * 100 + 'vh';
-        k.style.animationDuration = (4 + Math.random() * 5) + 's';
-        container.appendChild(k);
-    }
-}
-buatKunangKunang();
-
-// Logika Pilihan Tombol Tantangan
-tombolPilihan.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const jawaban = btn.getAttribute('data-jawaban');
-
-        if (jawaban === 'benar') {
-            // JAWABAN BENAR: Buka Taman!
-            bukaTamanMagis();
-        } else {
-            // JAWABAN SALAH: Tampilkan pesan peringatan
-            pesanSalah.classList.remove('tersembunyi');
-            btn.style.transform = 'scale(0.9)';
-            setTimeout(() => btn.style.transform = 'scale(1)', 200);
-        }
-    });
-});
-
-// Fungsi Utama: Membuka Taman & Momen Klimaks
-function bukaTamanMagis() {
-    // 1. Sembunyikan layar tantangan
-    layarTantangan.classList.add('tersembunyi');
-
-    // 2. Putar lagu Bruno Mars secara mulus
-    lagu.currentTime = 0;
-    lagu.volume = 0.8;
-    lagu.play().catch(() => console.log("Audio siap diputar"));
-
-    // 3. Munculkan lirik lagu utama di atas
-    lirikBox.innerText = "♪ That I should have bought you flowers, and held your hand...";
-
-    // 4. Munculkan 12 Bunga SVG Sekaligus Secara Beruntun (Cascade Effect)
-    for (let i = 0; i < 12; i++) {
-        // Atur posisi acak di area layar (menghindari bagian paling pinggir)
-        const x = Math.random() * (window.innerWidth - 150) + 75;
-        const y = Math.random() * (window.innerHeight - 250) + 150;
-        
-        // Jeda animasi bertahap (0.1s, 0.2s, dst.) biar mekarnya terlihat bergelombang estetik
-        const jedaAnimasi = i * 0.15; 
-
-        tumbuhkanBungaSVG(x, y, jedaAnimasi);
-    }
-
-    // 5. Munculkan Sekawanan Kupu-kupu Berterbangan
-    for (let j = 0; j < 6; j++) {
-        const kx = Math.random() * window.innerWidth;
-        const ky = Math.random() * window.innerHeight;
-        setTimeout(() => munculkanKupu(kx, ky), j * 300);
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
 }
 
-// Fungsi Menggambar Bunga SVG dengan Kelopak Berlapis
-function tumbuhkanBungaSVG(x, y, jeda) {
-    const palet = warnaBunga[Math.floor(Math.random() * warnaBunga.length)];
-    const wadah = document.createElement('div');
-    wadah.classList.add('wadah-bunga');
-    wadah.style.left = x + 'px';
-    wadah.style.top = y + 'px';
-
-    wadah.innerHTML = `
-        <svg class="kepala-bunga" viewBox="0 0 100 100" style="--jeda: ${jeda}s;">
-            <g transform="translate(50,50)">
-                <!-- Kelopak Lapis Luar -->
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(0)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(45)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(90)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(135)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(180)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(225)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(270)" />
-                <ellipse cx="0" cy="-22" rx="12" ry="22" fill="${palet.luar}" transform="rotate(315)" />
-                
-                <!-- Kelopak Lapis Dalam -->
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(22.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(67.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(112.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(157.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(202.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(247.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(292.5)" />
-                <ellipse cx="0" cy="-15" rx="8" ry="15" fill="${palet.dalam}" transform="rotate(337.5)" />
-
-                <!-- Putik Tengah -->
-                <circle cx="0" cy="0" r="9" fill="${palet.putik}" />
-            </g>
-        </svg>
-        <div class="tangkai" style="--jeda: ${jeda}s;"></div>
-    `;
-
-    taman.appendChild(wadah);
+body {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background: radial-gradient(circle at bottom, #091e22 0%, #030a0d 60%, #000000 100%);
+    font-family: 'Quicksand', sans-serif;
+    color: white;
+    position: relative;
 }
 
-// Fungsi Memunculkan Kupu-kupu
-function munculkanKupu(x, y) {
-    const kupu = document.createElement('div');
-    kupu.classList.add('kupu');
-    kupu.innerText = '🦋';
-    kupu.style.left = x + 'px';
-    kupu.style.top = y + 'px';
-    taman.appendChild(kupu);
+/* --- BINTANG LATAR KECIL-KECIL --- */
+#kunang-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.kunang {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.6);
+    animation: kedipBintang infinite alternate ease-in-out;
+}
+
+@keyframes kedipBintang {
+    0% { opacity: 0.2; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1.2); }
+}
+
+/* --- OVERLAY KARTU TEKA-TEKI --- */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 10, 13, 0.85);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.overlay.tersembunyi {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.kartu {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    padding: 2.2rem;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(100, 255, 218, 0.15);
+}
+
+.ikon-mahkota {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.kartu h1 {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+    color: #64ffda;
+}
+
+.soal-lirik {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    margin: 1.2rem 0;
+    color: #a5f3fc;
+}
+
+.pilihan-btn {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-pilihan {
+    background: rgba(100, 255, 218, 0.1);
+    border: 1px solid rgba(100, 255, 218, 0.3);
+    color: #64ffda;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-pilihan:hover {
+    background: #64ffda;
+    color: #030a0d;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
+}
+
+.pesan-salah {
+    margin-top: 1rem;
+    color: #fda4af;
+    font-size: 0.85rem;
+}
+
+/* --- KOTAK LIRIK TENGAH (ALA VIDEO) --- */
+#lirik-video-box {
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    text-align: center;
+    width: 90%;
+    pointer-events: none;
+}
+
+#teks-lirik-utama {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(100, 255, 218, 0.8), 0 0 30px rgba(100, 255, 218, 0.4);
+    animation: fadeInLirik 0.6s ease-out;
+}
+
+@keyframes fadeInLirik {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- TAMAN & BUNGA BERCAHAYA DARI BAWAH --- */
+#taman {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.wadah-bunga {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: bottom center;
+}
+
+.kepala-bunga {
+    width: 85px;
+    height: 85px;
+    z-index: 2;
+    filter: drop-shadow(0 0 15px rgba(100, 255, 218, 0.7));
+    transform: scale(0);
+    animation: mekarDariBawah 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: var(--jeda);
+}
+
+.tangkai {
+    width: 4px;
+    height: 160px;
+    background: linear-gradient(to top, #065f46, #34d399);
+    border-radius: 4px;
+    margin-top: -15px;
+    transform-origin: bottom center;
+    transform: scaleY(0);
+    animation: tumbuhTangkaiDariBawah 0.8s ease-out forwards;
+    animation-delay: var(--jeda);
+}
+
+.tangkai::before, .tangkai::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 8px;
+    background: #059669;
+    border-radius: 10px 0 10px 0;
+}
+.tangkai::before { left: -14px; top: 40%; transform: rotate(-25deg); }
+.tangkai::after { right: -14px; top: 60%; transform: scaleX(-1) rotate(-25deg); }
+
+@keyframes tumbuhTangkaiDariBawah {
+    to { transform: scaleY(1); }
+}
+
+@keyframes mekarDariBawah {
+    0% { transform: scale(0) rotate(-30deg); }
+    70% { transform: scale(1.1) rotate(5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+.btn-ulang {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 60;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(100, 255, 218, 0.3);
+    color: #64ffda;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+}
+
+.tersembunyi {
+    display: none !important;
 }
 
