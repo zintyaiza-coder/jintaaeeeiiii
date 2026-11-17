@@ -11,41 +11,38 @@
     <!-- Efek Kunang-kunang Latar -->
     <div id="kunang-container"></div>
 
-    <!-- HUD / Papan Status Game -->
-    <header id="hud">
-        <div class="stat-box">🌸 Bunga: <span id="skor">0</span> / 12</div>
-        <div class="stat-box">⏳ Waktu: <span id="waktu">30</span>d</div>
-        <div class="stat-box">🦋 Kupu-kupu: <span id="kupu">0</span></div>
-    </header>
-
-    <!-- Lirik Melayang saat Bermain -->
+    <!-- Lirik Melayang / Pesan Utama -->
     <div id="lirik-box"></div>
 
-    <!-- Kanvas Utama Permainan -->
+    <!-- Kanvas Utama Tempat Bunga & Kupu-kupu Muncul Nanti -->
     <main id="taman"></main>
 
-    <!-- Layar Pembuka (Start Screen) -->
-    <div id="layar-mulai" class="overlay">
+    <!-- KOTAK TANTANGAN / TEKA-TEKI AWAL -->
+    <div id="layar-tantangan" class="overlay">
         <div class="kartu">
-            <h1>✨ Taman Cahaya & Bunga ✨</h1>
-            <p>Tangkap <b>12 benih cahaya</b> sebelum waktu habis untuk memekarkan seluruh taman dan membuka kejutan akhir!</p>
-            <button id="btn-mulai">Mulai Bermain 🌸</button>
+            <h1>✨ Kunci Taman Magis ✨</h1>
+            <p>Selesaikan teka-teki lirik ini untuk membuka taman dan membangunkan bunga-bunga:</p>
+            <p class="soal-lirik">"That I should have bought you ______"</p>
+            
+            <div class="pilihan-btn">
+                <button class="btn-pilihan" data-jawaban="salah">Stars ✨</button>
+                <button class="btn-pilihan" data-jawaban="benar">Flowers 🌸</button>
+                <button class="btn-pilihan" data-jawaban="salah">Shadows 🌙</button>
+            </div>
+            <p id="pesan-salah" class="pesan-salah tersembunyi">Ups, bukan itu! Coba ingat lirik lagunya lagi... 🎶</p>
         </div>
     </div>
 
-    <!-- Layar Ending Spesial -->
+    <!-- LAYAR ENDING / KETERANGAN SETELAH TAMAN TERBUKA -->
     <div id="layar-ending" class="overlay tersembunyi">
         <div class="kartu ending-card">
-            <h1 id="judul-ending">Taman Impian Terwujud! 🌸🦋</h1>
-            <p id="pesan-ending">"That I should have bought you flowers, and held your hand..."</p>
-            <div class="hasil-akhir">
-                Total Bunga Mekar: <span id="skor-akhir">0</span> | Kupu-kupu: <span id="kupu-akhir">0</span>
-            </div>
+            <h1>Taman Impian Terwujud! 🌸🦋</h1>
+            <p>"That I should have bought you flowers, and held your hand..."</p>
             <button id="btn-ulang">Main Lagi 🔄</button>
         </div>
     </div>
 
-    <!-- Audio Lagu Bruno Mars -->
+    <!-- Audio Lagu -->
     <audio id="lagu" src="lagu.mp3" loop></audio>
 
     <script src="script.js"></script>
