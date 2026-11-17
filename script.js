@@ -164,9 +164,18 @@ function mulaiPertunjukan() {
     btnUlang.classList.remove('tersembunyi');
     buatRumput();
 
-    lagu.currentTime = 0;
+    // ATUR DETIK MULAI LAGU DI SINI (Ubah angka 0 jika ingin mulai dari detik lain)
+    lagu.currentTime = 0; 
     lagu.volume = 0.9;
     lagu.play().catch(() => console.log("Menunggu interaksi audio"));
+
+    // BEGITU TOMBOL FLOWERS DITEKAN: Langsung mekar 10 bunga sekaligus biar rimbun!
+    for (let i = 0; i < 10; i++) {
+        const posX = (window.innerWidth * 0.1) + Math.random() * (window.innerWidth * 0.8);
+        const tinggi = 160 + Math.random() * 120;
+        const skala = 0.8 + Math.random() * 0.4;
+        tanamBungaMewah(posX, tinggi, skala);
+    }
 
     const warnaKupu = ['#5eead4', '#f472b6', '#c084fc', '#fef08a'];
     for (let k = 0; k < 6; k++) {
@@ -224,6 +233,7 @@ function munculkanKupuCahaya(x, y, warna) {
     tamanBunga.appendChild(kupu);
 }
 
+// Klik di mana saja di layar untuk nanam bunga tambahan & partikel
 document.addEventListener('click', (e) => {
     if (!gameAktif) return;
     if (e.target.closest('#btn-ulang') || e.target.closest('.overlay')) return;
@@ -237,6 +247,7 @@ document.addEventListener('click', (e) => {
     tanamBungaMewah(e.clientX, tinggiBunga, skalaAcak);
 });
 
+// Tombol Main Lagi / Reset
 btnUlang.addEventListener('click', () => {
     gameAktif = false;
     indeksLirikAktif = -1;
