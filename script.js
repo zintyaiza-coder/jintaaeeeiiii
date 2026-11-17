@@ -13,6 +13,9 @@ const tombolPilihan = document.querySelectorAll('.btn-pilihan');
 
 let gameAktif = false;
 let partikelArray = [];
+let indeksLirikAktif = -1;
+
+const daftarJenisBunga = ['jenis-cyan', 'jenis-pink', 'jenis-ungu', 'jenis-emas'];
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -21,18 +24,18 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// --- SISTEM PARTIKEL CAHAYA ---
+// --- PARTIKEL KUNANG-KUNANG ---
 class Partikel {
     constructor(x, y, spesial = false) {
         this.x = x || Math.random() * canvas.width;
         this.y = y || canvas.height + Math.random() * 100;
-        this.size = spesial ? Math.random() * 4 + 2 : Math.random() * 2.5 + 0.8;
-        this.speedY = spesial ? (Math.random() - 0.5) * 4 : -(Math.random() * 1.2 + 0.3);
-        this.speedX = (Math.random() - 0.5) * (spesial ? 4 : 0.8);
+        this.size = spesial ? Math.random() * 4 + 2 : Math.random() * 2.5 + 1;
+        this.speedY = spesial ? (Math.random() - 0.5) * 4 : -(Math.random() * 1.1 + 0.3);
+        this.speedX = (Math.random() - 0.5) * (spesial ? 4 : 0.7);
         this.opacity = Math.random() * 0.8 + 0.2;
         this.fade = spesial ? 0.02 : 0.002;
         this.spesial = spesial;
-        const warnaList = ['#5eead4', '#fef08a', '#38bdf8', '#ffffff'];
+        const warnaList = ['#5eead4', '#fef08a', '#f472b6', '#c084fc'];
         this.color = warnaList[Math.floor(Math.random() * warnaList.length)];
     }
 
@@ -54,7 +57,7 @@ class Partikel {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
-        ctx.shadowBlur = 12;
+        ctx.shadowBlur = 14;
         ctx.shadowColor = this.color;
         ctx.fill();
         ctx.restore();
@@ -63,7 +66,7 @@ class Partikel {
 
 function initPartikel() {
     partikelArray = [];
-    for (let i = 0; i < 65; i++) {
+    for (let i = 0; i < 75; i++) {
         partikelArray.push(new Partikel(Math.random() * canvas.width, Math.random() * canvas.height));
     }
 }
@@ -95,16 +98,12 @@ function buatRumput() {
     }
 }
 
-// --- LOGIKA TEKA-TEKI ---
 tombolPilihan.forEach(btn => {
     btn.addEventListener('click', () => {
         if (btn.getAttribute('data-jawaban') === 'benar') {
             mulaiPertunjukan();
         } else {
             pesanSalah.classList.remove('tersembunyi');
-            pesanSalah.style.animation = 'none';
-            pesanSalah.offsetHeight;
-            pesanSalah.style.animation = null;
         }
     });
 });
@@ -114,12 +113,51 @@ function ubahLirik(teksBaru) {
     setTimeout(() => {
         teksLirik.innerText = teksBaru;
         teksLirik.classList.remove('lirik-transisi');
-    }, 400);
+    }, 350);
 }
 
-// --- PERTUNJUKAN UTAMA ---
+// --- JADWAL LIRIK LENGKAP "WHEN I WAS YOUR MAN" ---
+const jadwalLirik = [
+    { detik: 0.5, teks: "Same bed, but it feels just a little bit bigger now", aksiBunga: false },
+    { detik: 5.0, teks: "Our song on the radio, but it don't sound the same", aksiBunga: true },
+    { detik: 10.0, teks: "When our friends talk about you, all it does is just tear me down", aksiBunga: false },
+    { detik: 15.5, teks: "'Cause my heart breaks a little when I hear your name", aksiBunga: true },
+    { detik: 21.0, teks: "It all just sounds like ooh, ooh, ooh", aksiBunga: false },
+    { detik: 26.0, teks: "Mm, too young, too dumb to realize", aksiBunga: true },
+    { detik: 31.0, teks: "That I should have bought you flowers 🌸", aksiBunga: true },
+    { detik: 36.5, teks: "And held your hand 🤍", aksiBunga: true },
+    { detik: 41.5, teks: "Should have gave you all my hours", aksiBunga: false },
+    { detik: 46.0, teks: "When I had the chance", aksiBunga: true },
+    { detik: 51.0, teks: "Take you to every party 'cause all you wanted to do was dance", aksiBunga: true },
+    { detik: 59.0, teks: "♪ Now my baby's dancing, but she's dancing with another man ♪", aksiBunga: true }
+];
+
+// Sinkronisasi Real-Time dengan Audio
+lagu.addEventListener('timeupdate', () => {
+    if (!gameAktif) return;
+    const waktuSekarang = lagu.currentTime;
+
+    for (let i = jadwalLirik.length - 1; i >= 0; i--) {
+        if (waktuSekarang >= jadwalLirik[i].detik) {
+            if (indeksLirikAktif !== i) {
+                indeksLirikAktif = i;
+                ubahLirik(jadwalLirik[i].teks);
+                
+                if (jadwalLirik[i].aksiBunga) {
+                    const posX = (window.innerWidth * 0.15) + Math.random() * (window.innerWidth * 0.7);
+                    const tinggi = 160 + Math.random() * 120;
+                    const skala = 0.8 + Math.random() * 0.4;
+                    tanamBungaMewah(posX, tinggi, skala);
+                }
+            }
+            break;
+        }
+    }
+});
+
 function mulaiPertunjukan() {
     gameAktif = true;
+    indeksLirikAktif = -1;
     layarTantangan.classList.add('tersembunyi');
     lirikContainer.classList.remove('tersembunyi');
     petunjuk.classList.remove('tersembunyi');
@@ -130,38 +168,22 @@ function mulaiPertunjukan() {
     lagu.volume = 0.9;
     lagu.play().catch(() => console.log("Menunggu interaksi audio"));
 
-    const jadwalLirik = [
-        { teks: "I hope...", waktu: 300 },
-        { teks: "he buys you...", waktu: 2000 },
-        { teks: "flowers 🌸", waktu: 3800 },
-        { teks: "I hope he holds...", waktu: 6200 },
-        { teks: "your hand... 🤍", waktu: 8200 },
-        { teks: "Give you all his hours...", waktu: 10500 },
-        { teks: "When he has the chance...", waktu: 13200 },
-        { teks: "♪ That I should have bought you flowers... ♪", waktu: 16000 }
-    ];
-
-    jadwalLirik.forEach(item => {
-        setTimeout(() => {
-            if (gameAktif) ubahLirik(item.teks);
-        }, item.waktu);
-    });
-
-    const w = window.innerWidth;
-    setTimeout(() => tanamBungaMewah(w * 0.50, 260, 1.15, 0), 3500);
-    setTimeout(() => tanamBungaMewah(w * 0.40, 220, 0.95, 0.2), 3800);
-    setTimeout(() => tanamBungaMewah(w * 0.60, 230, 1.0, 0.3), 4000);
-    setTimeout(() => tanamBungaMewah(w * 0.30, 180, 0.85, 0.1), 6500);
-    setTimeout(() => tanamBungaMewah(w * 0.70, 190, 0.85, 0.2), 6800);
+    const warnaKupu = ['#5eead4', '#f472b6', '#c084fc', '#fef08a'];
+    for (let k = 0; k < 6; k++) {
+        const kx = (window.innerWidth * 0.2) + Math.random() * (window.innerWidth * 0.6);
+        const ky = (window.innerHeight * 0.4) + Math.random() * (window.innerHeight * 0.35);
+        const warna = warnaKupu[k % warnaKupu.length];
+        munculkanKupuCahaya(kx, ky, warna);
+    }
 }
 
-function tanamBungaMewah(x, tinggi, skala, delay) {
+function tanamBungaMewah(x, tinggi, skala) {
+    const jenis = daftarJenisBunga[Math.floor(Math.random() * daftarJenisBunga.length)];
     const wrapper = document.createElement('div');
-    wrapper.classList.add('bunga-wrapper');
+    wrapper.classList.add('bunga-wrapper', jenis);
     wrapper.style.left = x + 'px';
     wrapper.style.setProperty('--tinggi-batang', tinggi + 'px');
     wrapper.style.setProperty('--skala', skala);
-    wrapper.style.setProperty('--delay', delay + 's');
     wrapper.style.setProperty('--durasi-angin', (4 + Math.random() * 2) + 's');
     wrapper.style.setProperty('--sudut-awal', (-3 - Math.random() * 3) + 'deg');
     wrapper.style.setProperty('--sudut-akhir', (3 + Math.random() * 3) + 'deg');
@@ -184,7 +206,24 @@ function tanamBungaMewah(x, tinggi, skala, delay) {
     tamanBunga.appendChild(wrapper);
 }
 
-// --- INTERAKSI KLIK LAYAR ---
+function munculkanKupuCahaya(x, y, warna) {
+    const kupu = document.createElement('div');
+    kupu.classList.add('kupu-magis');
+    kupu.style.left = x + 'px';
+    kupu.style.top = y + 'px';
+    kupu.style.setProperty('--warna-kupu', warna);
+    kupu.style.setProperty('--durasi-terbang', (8 + Math.random() * 6) + 's');
+
+    kupu.innerHTML = `
+        <div class="sayap-kupu">
+            <div class="sayap-kiri"></div>
+            <div class="sayap-kanan"></div>
+        </div>
+    `;
+
+    tamanBunga.appendChild(kupu);
+}
+
 document.addEventListener('click', (e) => {
     if (!gameAktif) return;
     if (e.target.closest('#btn-ulang') || e.target.closest('.overlay')) return;
@@ -193,16 +232,18 @@ document.addEventListener('click', (e) => {
         partikelArray.push(new Partikel(e.clientX, e.clientY, true));
     }
 
-    const tinggiBunga = Math.max(120, window.innerHeight - e.clientY);
-    const skalaAcak = 0.7 + Math.random() * 0.45;
-    tanamBungaMewah(e.clientX, tinggiBunga, skalaAcak, 0);
+    const tinggiBunga = Math.max(140, window.innerHeight - e.clientY);
+    const skalaAcak = 0.75 + Math.random() * 0.4;
+    tanamBungaMewah(e.clientX, tinggiBunga, skalaAcak);
 });
 
 btnUlang.addEventListener('click', () => {
     gameAktif = false;
+    indeksLirikAktif = -1;
     tamanBunga.innerHTML = '';
     rumputContainer.innerHTML = '';
     lagu.pause();
+    lagu.currentTime = 0;
     lirikContainer.classList.add('tersembunyi');
     petunjuk.classList.add('tersembunyi');
     btnUlang.classList.add('tersembunyi');
