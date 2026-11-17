@@ -116,15 +116,15 @@ function ubahLirik(teksBaru) {
     }, 350);
 }
 
-// --- JADWAL LIRIK YANG DIMAJUKAN SEDIKIT AGAR TIDAK TELAT ---
+// --- JADWAL LIRIK YANG SUDAH DIPELANHKAN/DISESUAIKAN DIKIT ---
 const jadwalLirik = [
     { detik: 0.0, teks: "Mm, too young, too dumb to realize[cite: 1]", aksiBunga: true },
-    { detik: 2.8, teks: "That I should have bought you flowers 🌸[cite: 1]", aksiBunga: true },
-    { detik: 7.8, teks: "And held your hand 🤍[cite: 1]", aksiBunga: true },
-    { detik: 12.2, teks: "Should have gave you all my hours[cite: 1]", aksiBunga: false },
-    { detik: 16.8, teks: "When I had the chance[cite: 1]", aksiBunga: true },
-    { detik: 21.2, teks: "Take you to every party 'cause all you wanted to do was dance[cite: 1]", aksiBunga: true },
-    { detik: 28.5, teks: "♪ Now my baby's dancing, but she's dancing with another man ♪[cite: 1]", aksiBunga: true }
+    { detik: 3.5, teks: "That I should have bought you flowers 🌸[cite: 1]", aksiBunga: true },
+    { detik: 8.8, teks: "And held your hand 🤍[cite: 1]", aksiBunga: true },
+    { detik: 13.5, teks: "Should have gave you all my hours[cite: 1]", aksiBunga: false },
+    { detik: 18.2, teks: "When I had the chance[cite: 1]", aksiBunga: true },
+    { detik: 23.0, teks: "Take you to every party 'cause all you wanted to do was dance[cite: 1]", aksiBunga: true },
+    { detik: 30.5, teks: "♪ Now my baby's dancing, but she's dancing with another man ♪[cite: 1]", aksiBunga: true }
 ];
 
 // Sinkronisasi Real-Time dengan Audio
